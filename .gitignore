@@ -1,0 +1,7 @@
+# Secretos y entornos locales (nunca versionar)
+.env
+.env.*
+!.env.example
+
+# Supabase CLI local
+.supabase/

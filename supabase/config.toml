@@ -1,0 +1,9 @@
+# Configuración local / despliegue Supabase CLI.
+# Sustituye project_id cuando enlaces un proyecto remoto: supabase link
+
+[api]
+enabled = true
+
+[functions.sellu-daily-sync]
+# Invocación programada (cron / pg_net): sin JWT de usuario; usa CRON_SECRET en la función.
+verify_jwt = false
