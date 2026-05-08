@@ -2,6 +2,8 @@
 
 Spike focused on **calling the Sell‑U endpoint** (`ReportePowerBI.php` POST) and **persisting to Supabase** (`raw`/staging depending on configuration).
 
+**Architecture (stack, layers, pipeline diagram):** [docs/ARCHITECTURE.md](docs/ARCHITECTURE.md)
+
 - **Edge**: `supabase/functions/sellu-daily-sync/` — layered design: `handler` (HTTP), `sync_service`, `sellu_api`, `payload_parse`, `row_mappers`, helpers (`env`, `calendar`, `types`).
 - **Local parity** (without Edge): `scripts/ingest-local.mjs` + `scripts/sellu-sync-engine.mjs`.
 
