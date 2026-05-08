@@ -3,5 +3,9 @@
 .env.*
 !.env.example
 
-# Supabase CLI local
+# Supabase CLI local / caché de empaquetado
 .supabase/
+supabase/.temp/
+
+node_modules/
+.DS_Store

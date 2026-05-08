@@ -1,0 +1,12 @@
+{
+  "name": "spike-sellu-crm-supabase-daily-ingest",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "ingest:local": "node --env-file=.env scripts/ingest-local.mjs",
+    "deploy:edge:sellu": "node --env-file=.env scripts/deploy-sellu-edge.mjs"
+  },
+  "dependencies": {
+    "@supabase/supabase-js": "^2.49.8"
+  }
+}

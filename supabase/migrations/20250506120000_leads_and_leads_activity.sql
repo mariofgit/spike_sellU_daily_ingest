@@ -1,5 +1,5 @@
--- Spike: receptáculo para datos sincronizados desde Sell-U (CRM).
--- Ajusta columnas cuando tengas el contrato real del API.
+-- Spike: Sell-U synced landing tables (normalized reference migration in public.)
+-- Tune columns once the Sell-U payload contract stabilizes.
 
 create table if not exists public.leads (
   id uuid primary key default gen_random_uuid (),
@@ -56,8 +56,7 @@ create trigger leads_set_updated_at
 alter table public.leads enable row level security;
 alter table public.leads_activity enable row level security;
 
--- Ajusta políticas según tu producto (solo servicio con service_role suele bastar para ETL).
--- La clave service_role en PostgREST ignora RLS; anon/authenticated quedan sin acceso por defecto.
+-- Service-role ETL traditionally bypasses RLS; tighten policies for anon/auth per product needs.
 
-comment on table public.leads is 'Leads importados desde Sell-U (CRM).';
-comment on table public.leads_activity is 'Actividades de lead importadas desde Sell-U.';
+comment on table public.leads is 'Leads mirrored from Sell-U (CRM)';
+comment on table public.leads_activity is 'Lead timeline rows mirrored from Sell-U';
