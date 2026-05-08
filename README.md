@@ -1,16 +1,16 @@
 # spike-sellu-crm-supabase-daily-ingest
 
-Spike enfocado en **trigger del endpoint Sell‑U** (`ReportePowerBI.php` POST) y **persistencia en Supabase** (`raw`/staging según configuración).
+Spike focused on **calling the Sell‑U endpoint** (`ReportePowerBI.php` POST) and **persisting to Supabase** (`raw`/staging depending on configuration).
 
-- **Edge**: `supabase/functions/sellu-daily-sync/` — capas: `handler` (HTTP), `sync_service`, `sellu_api`, `payload_parse`, `row_mappers`, utilidades (`env`, `calendar`, `types`).
-- **Paridad local** (sin Edge): `scripts/ingest-local.mjs` + `scripts/sellu-sync-engine.mjs`.
+- **Edge**: `supabase/functions/sellu-daily-sync/` — layered design: `handler` (HTTP), `sync_service`, `sellu_api`, `payload_parse`, `row_mappers`, helpers (`env`, `calendar`, `types`).
+- **Local parity** (without Edge): `scripts/ingest-local.mjs` + `scripts/sellu-sync-engine.mjs`.
 
-Variables de entorno: `.env.example`.
+Environment variables: `.env.example`.
 
-## Edge Function + cron diario
+## Edge Function + daily cron
 
-1. CLI: `supabase login` y, si hace falta, `supabase link --project-ref <ref>`.
-2. Con el mismo `.env`: `npm run deploy:edge:sellu` (o `node --env-file=.env scripts/deploy-sellu-edge.mjs`). La CLI rechaza secretos `SUPABASE_*` personalizados: el script publica equivalentes `INGEST_*` tomados de tus `SUPABASE_*` locales.
-3. Define `CRON_SECRET` en `.env` antes de desplegar si no quieres que se regenere en cada corrida (mismo valor en el SQL de cron).
-4. Dashboard → Extensions: **pg_cron** y **pg_net**.
-5. SQL Editor: `supabase/sql/sellu-daily-sync-pg-cron.sql`; sustituir `__PROJECT_REF__` y `__CRON_SECRET__`; cron en UTC si aplica.
+1. CLI: `supabase login` and, if needed, `supabase link --project-ref <ref>`.
+2. Same `.env` as local: `npm run deploy:edge:sellu` (or `node --env-file=.env scripts/deploy-sellu-edge.mjs`). The CLI rejects custom `SUPABASE_*` secrets; the script uploads `INGEST_*` equivalents from your local `SUPABASE_*` vars.
+3. Set `CRON_SECRET` in `.env` before deploy if you don’t want a new value each run (use the same value in the cron SQL).
+4. Dashboard → Extensions: enable **pg_cron** and **pg_net**.
+5. SQL Editor: `supabase/sql/sellu-daily-sync-pg-cron.sql`; replace `__PROJECT_REF__` and `__CRON_SECRET__`; cron schedule is UTC unless you adjust it.

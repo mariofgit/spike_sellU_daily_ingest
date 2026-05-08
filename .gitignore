@@ -1,9 +1,9 @@
-# Secretos y entornos locales (nunca versionar)
+# Secrets and local env (never commit)
 .env
 .env.*
 !.env.example
 
-# Supabase CLI local / caché de empaquetado
+# Supabase CLI local / packaging cache
 .supabase/
 supabase/.temp/
 

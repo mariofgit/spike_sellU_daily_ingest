@@ -30,7 +30,7 @@ type PostResolveResult =
   | { tag: "caught_up"; meta: Record<string, unknown> };
 
 /**
- * Servicio único del spike: obtener payload Sell-U → escribir en Supabase por modelo staging o normalizado.
+ * Core spike flow: fetch Sell-U payload → write to Supabase (staging or normalized ingest model).
  */
 export async function syncSellu(supabase: SupabaseClient): Promise<Json> {
   const tableLeads = getIngestEnv("INGEST_TABLE_LEADS", "SUPABASE_TABLE_LEADS") ?? "leads";
@@ -227,7 +227,7 @@ export async function syncSellu(supabase: SupabaseClient): Promise<Json> {
     postResolved = null;
   } else {
     throw new Error(
-      "Configure SELLU_REPORT_POST_URL (POST jsnInfo for leads/actividades), or SELLU_SYNC_URL, or SELLU_LEADS_URL (optional SELLU_ACTIVITIES_URL).",
+      "Configure SELLU_REPORT_POST_URL (POST jsnInfo for leads/activities), or SELLU_SYNC_URL, or SELLU_LEADS_URL (optional SELLU_ACTIVITIES_URL).",
     );
   }
 

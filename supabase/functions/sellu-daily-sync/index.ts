@@ -1,8 +1,8 @@
 /**
- * Spike Sell-U → Supabase: punto de entrada HTTP (Edge Runtime).
+ * Sell-U → Supabase: Edge HTTP entrypoint.
  *
- * Diseño en capas: `handler.ts` (HTTP), `sync_service.ts` (orquestación BD),
- * `sellu_api.ts` (upstream POST/GET), `payload_parse.ts` / `row_mappers.ts` (forma de datos).
+ * Layered layout: `handler.ts` (HTTP), `sync_service.ts` (DB orchestration),
+ * `sellu_api.ts` (upstream POST/GET), `payload_parse.ts` / `row_mappers.ts` (mapping).
  */
 import "jsr:@supabase/functions-js/edge-runtime.d.ts";
 

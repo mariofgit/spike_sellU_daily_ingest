@@ -32,7 +32,7 @@ export function mergeSelluPayloads(
   return { ...left, ...right };
 }
 
-/** Mejor esfuerzo: array leads desde payloads heterogéneos Sell-U. */
+/** Best-effort: extract a leads array from heterogeneous Sell-U payloads. */
 export function extractLeadObjects(payload: unknown): Json[] {
   if (Array.isArray(payload)) {
     return payload.filter((x): x is Json => asRecord(x) !== null);
@@ -65,7 +65,7 @@ export function extractLeadObjects(payload: unknown): Json[] {
   return [];
 }
 
-/** Actividades en raíz o anidadas bajo leads. */
+/** Activities at payload root or nested under leads. */
 export function extractActivityObjects(payload: unknown): Json[] {
   const root = asRecord(payload);
   if (!root) return [];

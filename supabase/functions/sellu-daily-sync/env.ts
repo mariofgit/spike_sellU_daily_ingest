@@ -16,8 +16,8 @@ export function requireEnv(name: string): string {
 }
 
 /**
- * La plataforma no permite secretos Edge definidos por el usuario con prefijo `SUPABASE_`.
- * En producción usa `INGEST_*`; en local sigue valiendo `SUPABASE_*` vía `--env-file`.
+ * The platform does not allow user-defined Edge secrets whose names start with `SUPABASE_`.
+ * Use `INGEST_*` in production Edge; `SUPABASE_*` still works locally via `--env-file`.
  */
 export function getIngestEnv(ingestName: string, legacySupabaseName: string): string | undefined {
   const a = getEnv(ingestName);
@@ -27,7 +27,7 @@ export function getIngestEnv(ingestName: string, legacySupabaseName: string): st
   return undefined;
 }
 
-/** Si CRON_SECRET está definido en la función, exige Bearer o cabecera x-cron-secret. */
+/** When CRON_SECRET is set on the function, require Bearer or `x-cron-secret` header. */
 export function authorize(req: Request): void {
   const cronSecret = getEnv("CRON_SECRET");
   if (!cronSecret) return;

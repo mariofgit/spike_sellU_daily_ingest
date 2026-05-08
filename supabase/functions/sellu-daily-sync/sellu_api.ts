@@ -51,7 +51,7 @@ export function buildJsnInfo(
   };
 }
 
-/** POST con body application/x-www-form-urlencoded (contrato Sell-U). */
+/** POST with application/x-www-form-urlencoded body (Sell-U contract). */
 export async function postSelluReport(
   url: string,
   reportType: "leads" | "actividades",
@@ -89,7 +89,7 @@ export async function postSelluReport(
   }
 }
 
-/** Modo GET opcional (URLs directas de leads/actividades). */
+/** Optional GET mode (direct leads/activities URLs). */
 export async function fetchSelluJson(url: string, method: string): Promise<unknown> {
   const headers: Record<string, string> = {
     accept: "application/json",

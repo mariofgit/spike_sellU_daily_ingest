@@ -1,19 +1,19 @@
 -- =============================================================================
--- Programar llamada diaria a la Edge Function sellu-daily-sync (pg_cron + pg_net)
+-- Schedule daily HTTP POST to Edge Function sellu-daily-sync (pg_cron + pg_net)
 -- =============================================================================
--- Requisitos (Dashboard → Database → Extensions): pg_cron, pg_net habilitados.
+-- Prerequisites (Dashboard → Database → Extensions): enable pg_cron and pg_net.
 --
--- Antes sustituye:
---   __PROJECT_REF__       → ej. abcdefghijklmnop (primer segmento del host de SUPABASE_URL)
---   __CRON_SECRET__       → igual que secreto CRON_SECRET en Dashboard → Functions → Secrets
+-- Replace before running:
+--   __PROJECT_REF__       → e.g. abcdefghijklmnop (first segment of your SUPABASE_URL host)
+--   __CRON_SECRET__       → must match CRON_SECRET in Dashboard → Functions → Secrets
 --
--- Esta función tiene verify_jwt = false en config.toml: la seguridad viene de CRON_SECRET
--- (cabecera x-cron-secret o Authorization Bearer), ver authorize() en index.ts.
+-- verify_jwt = false in config.toml for this function: authenticate via CRON_SECRET only
+-- (`x-cron-secret` or Authorization Bearer); see authorize() in env.ts / handler.ts.
 --
--- Zona cron: habitualmente UTC. Ejemplo “cada día 12:05 UTC” (ajusta a tu TZ):
+-- Cron timezone is typically UTC. Example “daily at 12:05 UTC” (adjust to your TZ):
 --   '5 12 * * *'
 --
--- Para reemplazar un job viejo del mismo nombre:
+-- To replace an older job with the same name:
 --   SELECT cron.unschedule(jobid) FROM cron.job WHERE jobname = 'sellu-daily-sync-daily';
 
 SELECT cron.schedule(

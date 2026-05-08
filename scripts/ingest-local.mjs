@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 /**
- * Sale-U → Supabase full sync via the Edge-equivalent engine.
+ * Sell-U → Supabase full sync via the Edge-equivalent engine.
  * Runs on your workstation with credentials from .env (never commit secrets).
  *
  *   npm install

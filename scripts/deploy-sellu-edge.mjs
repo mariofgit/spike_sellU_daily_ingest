@@ -1,9 +1,9 @@
 #!/usr/bin/env node
 /**
- * Despliego de sellu-daily-sync + sincronización de secretos necesarios para producción.
+ * Deploy sellu-daily-sync Edge Function + sync production secrets from .env.
  *
- * Prerrequisitos: supabase CLI instalada y sesión válida (`supabase login`).
- * Uso desde la raíz del spike:
+ * Prerequisites: Supabase CLI installed and authenticated (`supabase login`).
+ * From repo root:
  *
  *   node --env-file=.env scripts/deploy-sellu-edge.mjs
  */
@@ -41,8 +41,9 @@ const EDGE_EXTRA_KEYS = [
 ];
 
 /**
- * La CLI `supabase secrets set` rechaza nombres `SUPABASE_*` definidos por el usuario (no chocar con vars del runtime).
- * Mapeamos a `INGEST_*`; el código Edge y `sellu-sync-engine` leen cualquiera de los dos.
+ * `supabase secrets set` rejects user-defined secret names prefixed `SUPABASE_*`
+ * (reserved for host-injected vars). Push these as `INGEST_*` instead.
+ * Edge + `sellu-sync-engine` read either naming scheme.
  */
 const INGEST_DOTENV_PAIR = [
   ["INGEST_DB_SCHEMA", "SUPABASE_DB_SCHEMA"],
@@ -64,7 +65,9 @@ function projectRefFromUrl(raw) {
   const u = new URL(raw.trim());
   const host = u.hostname;
   const sub = host.split(".")[0];
-  if (!sub || sub.includes("localhost")) throw new Error("SUPABASE_URL no parece ser un proyecto alojado");
+  if (!sub || sub.includes("localhost")) {
+    throw new Error("SUPABASE_URL does not look like a hosted Supabase project URL");
+  }
   return sub;
 }
 
@@ -83,7 +86,7 @@ function collectLines() {
     cron = crypto.randomBytes(24).toString("hex");
     process.env.CRON_SECRET = cron;
     console.error(
-      "[deploy-sellu-edge] Generé CRON_SECRET nuevo; añádela a tu .env local y usa el mismo valor en pg_cron (SQL).",
+      "[deploy-sellu-edge] Generated new CRON_SECRET; add it to your local .env and use the same value in pg_cron SQL.",
     );
     console.error(`[deploy-sellu-edge] CRON_SECRET=${cron}`);
   }
@@ -101,7 +104,7 @@ function collectLines() {
   if (out.SELLU_AUTH_KEY === undefined && getenv("SELLU_AUTHORIZATION") === undefined &&
     getenv("SELLU_API_TOKEN") === undefined) {
     throw new Error(
-      "Falta al menos uno de: SELLU_AUTH_KEY, SELLU_AUTHORIZATION, SELLU_API_TOKEN para postSellu.",
+      "At least one of SELLU_AUTH_KEY, SELLU_AUTHORIZATION, SELLU_API_TOKEN is required for Sell-U POST.",
     );
   }
 
@@ -131,27 +134,31 @@ async function main() {
     writeFileSync(envPath, `${lines.join("\n")}\n`, "utf8");
 
     console.error(`[deploy-sellu-edge] project_ref=${projectRef}`);
-    console.error("[deploy-sellu-edge] supabase secrets set --env-file (Sell‑U + INGEST_*; SUPABASE_* del .env se renombra para Edge)");
+    console.error(
+      "[deploy-sellu-edge] supabase secrets set --env-file (Sell-U + INGEST_*; SUPABASE_* from .env mapped for Edge)",
+    );
     execSupabase(["secrets", "set", "--env-file", envPath, "--project-ref", projectRef], root);
 
     console.error("[deploy-sellu-edge] supabase functions deploy sellu-daily-sync");
     execSupabase(["functions", "deploy", "sellu-daily-sync", "--project-ref", projectRef], root);
 
     const tplPath = join(root, "supabase", "sql", "sellu-daily-sync-pg-cron.sql");
-    const tpl = readFileSync(tplPath, "utf8");
+    readFileSync(tplPath, "utf8");
     console.error("");
-    console.error("--- Cron (una vez): abre Dashboard → SQL y sustituye __PROJECT_REF__ y __CRON_SECRET__ desde este paquete, o edita:");
+    console.error(
+      "--- Cron (one-time): open Dashboard → SQL, replace __PROJECT_REF__ and __CRON_SECRET__, or edit:",
+    );
     console.error(`  ${tplPath}`);
     console.error("");
-    console.error("Valores:");
+    console.error("Values:");
     console.error(`  PROJECT_REF=${projectRef}`);
     console.error(`  CRON_SECRET=${cronSecret}`);
     console.error("");
     console.warn(
-      "[deploy-sellu-edge] Revisa también que estén habilitadas las extensiones pg_cron y pg_net en ese proyecto antes de ejecutar el SQL.",
+      "[deploy-sellu-edge] Ensure pg_cron and pg_net extensions are enabled on this project before running the SQL.",
     );
     console.warn(
-      `[deploy-sellu-edge] URL de invocación: https://${projectRef}.supabase.co/functions/v1/sellu-daily-sync (verify_jwt=false; protege con CRON_SECRET)`,
+      `[deploy-sellu-edge] Invoke URL: https://${projectRef}.supabase.co/functions/v1/sellu-daily-sync (verify_jwt=false; protect with CRON_SECRET)`,
     );
   } finally {
     rmSync(tmpDir, { recursive: true, force: true });

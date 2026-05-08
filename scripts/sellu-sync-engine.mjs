@@ -40,7 +40,7 @@ function selluCalendarDayWindow(calendarYmd) {
 }
 
 /**
- * Sale-U → Postgres sync engine (same behaviour as the Edge Function).
+ * Sell-U → Postgres sync engine (same behaviour as the Edge Function).
  * @param {(name: string) => string | undefined} getEnv
  */
 export function makeSyncSellu(getEnv) {

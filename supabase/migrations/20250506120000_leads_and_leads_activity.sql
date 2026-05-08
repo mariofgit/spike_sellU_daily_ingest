@@ -1,4 +1,4 @@
--- Spike: Sell-U synced landing tables (normalized reference migration in public.)
+-- Spike: Sell-U synced landing tables (normalized reference migration in public).
 -- Tune columns once the Sell-U payload contract stabilizes.
 
 create table if not exists public.leads (

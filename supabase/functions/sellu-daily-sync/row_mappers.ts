@@ -17,7 +17,7 @@ function pickOptionalString(
   return s ?? null;
 }
 
-/** Separa blobs fecha/hora Sell-U para columnas staging. */
+/** Split Sell-U date/time strings into naive date + time snippets for staging columns. */
 export function splitDateTimeRaw(
   v: unknown,
 ): { date: string | null; time: string | null } {
