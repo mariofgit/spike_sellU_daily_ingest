@@ -1,8 +1,7 @@
 # Revisión de schemas: raw, ingest y core
 
 **Proyecto:** RYD Bases — Supabase  
-**Fecha:** 2026-05-20  
-**Tipo de revisión:** análisis cualitativo de diseño y estado operativo (no auditoría de datos fila a fila).
+**Tipo de revisión:** análisis cualitativo de diseño y estado operativo
 
 ---
 
