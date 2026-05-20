@@ -6,6 +6,8 @@ Spike focused on **calling the Sell‑U endpoint** (`ReportePowerBI.php` POST) a
 
 **Database schemas (raw, ingest, core):** [docs/REVISION_SCHEMAS_RAW_INGEST_CORE.md](docs/REVISION_SCHEMAS_RAW_INGEST_CORE.md)
 
+**RYD-etl Excel ingest (qualitative review):** [docs/REVISION_INGEST_RYD_ETL.md](docs/REVISION_INGEST_RYD_ETL.md)
+
 - **Edge**: `supabase/functions/sellu-daily-sync/` — layered design: `handler` (HTTP), `sync_service`, `sellu_api`, `payload_parse`, `row_mappers`, helpers (`env`, `calendar`, `types`).
 - **Local parity** (without Edge): `scripts/ingest-local.mjs` + `scripts/sellu-sync-engine.mjs`.
 
