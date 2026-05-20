@@ -119,11 +119,3 @@ La pregunta correcta no es “¿cumple 4FN todo el warehouse?”, sino “¿cump
 1. **Diseño:** apto para producción; capas bien ubicadas; contrato raw→core claro vía funciones y cola.  
 2. **Operación:** monitorear `pending_sync_jobs` tras picos de carga (Sell-U diario + catch-up).  
 3. **Documentación:** mantener este doc y [ARCHITECTURE.md](./ARCHITECTURE.md) como par (ingesta vs modelo de datos).  
-4. **Spike local:** no usar `raw.import_batches` / `public.leads` como referencia de prod; alinear siempre `INGEST_IMPORT_BATCHES_SCHEMA=ingest`.
-
----
-
-## Referencias
-
-- [ARCHITECTURE.md](./ARCHITECTURE.md) — pipeline Sell-U, cron diario, cursor  
-- Funciones: `process_pending_sync_jobs`, `sync_raw_leads_batch`, `sync_raw_lead_activities_batch`, `enqueue_raw_leads_sync_job`
